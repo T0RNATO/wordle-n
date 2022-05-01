@@ -1,0 +1,81 @@
+#title {
+    font-size: 15vw;
+}
+body {
+    background: #111;
+}
+* {
+    color: white
+}
+input {
+    width: 70vw;
+    height: 10vh;
+    font-size: 8vw;
+    background: #222;
+    border: 2px solid #222;
+    margin-bottom: 20px;
+    padding-left: 3vw;
+}
+#main {
+    width: 100vw;
+    height: 100vw;
+    text-align: center;
+}
+p {
+    width: 80vw;
+    display: inline-block;
+    text-align: left;
+    font-size: 4vw;
+    margin-top: 0px;
+}
+button {
+    width: 70vw;
+    height: 10vh;
+    font-size: 6vw;
+    background: #333;
+}
+button:disabled {
+    color: #777
+}
+#gamediv.anim {
+    margin-top: unset;
+    transition: ease-in-out 1.2s;
+}
+#start.anim {
+    transform: translateX(-200vh);
+    transition: ease-in-out 1s;
+    position: absolute;
+}
+td {
+    width: 8.5vw;
+    height: 8.5vw;
+    border: 1px solid #aaa;
+    text-align: center;
+    font-size: 6vw;
+    text-transform: capitalize;
+}
+td.empty {
+    height: 2vw;
+}
+table {
+    display: inline-block;
+    margin-bottom: 3vh;
+}
+#gamediv {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    margin-top: 200vh;
+}
+#subtitle {
+    display: inline-block;
+    transform: translateX(-200vw);
+    font-size: 4.5vw;
+    margin-bottom: 2vh;
+}
+#subtitle.anim {
+    transform: unset;
+    transition: ease-in-out 1.5s;
+}
