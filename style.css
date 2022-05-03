@@ -115,3 +115,7 @@ button.key {
 button.key.wide {
     flex-grow: 2;
 }
+#spacer {
+    width: 100vw;
+    height: 33vh;
+}
