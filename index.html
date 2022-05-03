@@ -1,6 +1,9 @@
 <head>
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="main">
@@ -9,8 +12,47 @@
         <div id="start">
             <p>wordle<sup>&#119899;</sup> is a game similar to Wordle, Dordle, and Quordle, but where you can pick exactly the number of boards you want to have. Simply type the number in, and hit Play!</p> <br>
             <input type="number" id="boardnum" value="2" max="99"> <br>
-            <button id="nameout">Play the daily Duordle</button>
+            <button id="nameout">Play the daily Duordle</button><br>
         </div>
+
+        <div id="keyboard">
+            <div class="row" id="row1">
+                <button class="key">Q</button>
+                <button class="key">W</button>
+                <button class="key">E</button>
+                <button class="key">R</button>
+                <button class="key">T</button>
+                <button class="key">Y</button>
+                <button class="key">U</button>
+                <button class="key">I</button>
+                <button class="key">O</button>
+                <button class="key">P</button>
+            </div>
+            <div class="row" id="row2">
+                <button class="key">A</button>
+                <button class="key">S</button>
+                <button class="key">D</button>
+                <button class="key">F</button>
+                <button class="key">G</button>
+                <button class="key">H</button>
+                <button class="key">J</button>
+                <button class="key">K</button>
+                <button class="key">L</button>
+            </div>
+            <div class="row" id="row3">
+                <button class="key wide" id="return">&#9166;</button>
+                <button class="key">Z</button>
+                <button class="key">X</button>
+                <button class="key">C</button>
+                <button class="key">V</button>
+                <button class="key">B</button>
+                <button class="key">N</button>
+                <button class="key">M</button>
+                <button class="key wide" id="backspace">&#9003;</button>
+            </div>
+        </div>
+
         <div id="gamediv"></div>
+        
     </div>
 </body>
