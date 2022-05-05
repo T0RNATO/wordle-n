@@ -3,10 +3,11 @@
 }
 body {
     background: #111;
+    touch-action: manipulation;
 }
 * {
     color: white;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 input {
     width: 70vw;
@@ -48,7 +49,7 @@ button:disabled {
     position: absolute;
 }
 td {
-    width: 8.5vw;
+    width: 8vw;
     height: 8.5vw;
     border: 1px solid #aaa;
     text-align: center;
@@ -57,6 +58,10 @@ td {
 }
 td.empty {
     height: 3vw;
+}
+td.clue {
+    height: 4vw;
+    font-size: 3vw;
 }
 table {
     display: inline-block;
@@ -84,7 +89,7 @@ table {
     position: fixed;
     background: #444;
     border-top: 1vh solid #666;
-    width: 100.5vw;
+    width: 100%;
     height: 30vh;
     bottom: -100vh;
     left: 0;
@@ -104,10 +109,11 @@ div.row {
     justify-content: center;
 }
 button.key {
-    width: 9.5vw;
+    width: 9vw;
     height: 9vh;
     background: transparent;
     font-size: 6vw;
+    padding: 0;
     border-radius: 20% / 10%;
     margin: 0.5vw;
     border: 0.4vw solid #4d4d4d;
@@ -118,4 +124,7 @@ button.key.wide {
 #spacer {
     width: 100vw;
     height: 33vh;
+}
+button.key.used {
+    background-color: #3c3c3c;
 }
