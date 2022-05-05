@@ -151,7 +151,7 @@ let cursor = 0
 let guess = ''
 document.querySelectorAll(".key").forEach((el) => {
     el.addEventListener("click", (event) => {
-        keyPress(event.target.id);
+        keyPress(event.target.id.toLowerCase());
     })
 })
 
