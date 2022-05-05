@@ -6,7 +6,63 @@ var allowed = ["aahed", "aalii", "aargh", "aarti", "abaca", "abaci", "abacs", "a
 var inp = document.querySelector("input")
 var out = document.querySelector("#nameout")
 
-inp.addEventListener("keyup", () => {
+function keyPress(key) {
+    let cells = document.querySelectorAll(".open")
+    let i = 0
+    if (key.match(/([a-z]|[A-Z])/g) && cursor < 5 && key.length == 1) {
+        cells.forEach((cell) => {
+            if (i % 5 == cursor) {
+                cell.innerText = key
+            }
+            i++
+        })
+        guess += key;
+        cursor++
+        if (cursor == 5 && !allowed.includes(guess)) {
+            cells.forEach((cell) => {
+                cell.style.color = "red";
+            })
+        }
+    } else if (key.toLowerCase() == "backspace" && cursor > 0) {
+        cursor--
+        cells.forEach((cell) => {
+            cell.style.color = "unset";
+            if (i % 5 == cursor) {
+                cell.innerText = "";
+            }
+            i++
+        })
+        guess = guess.slice(0, -1)
+    } else if (key.toLowerCase() == "enter" && cursor == 5) {
+        if (allowed.includes(guess)) {
+            document.querySelectorAll("table:not(.completed)").forEach((table, index) => {
+                markWord(guess, grid_answers[index], table)
+                guess.split('').forEach((letter) => {
+                    document.querySelector("#" + letter).classList.add('used');
+                })
+                table.querySelectorAll(".empty").forEach((cell, i) => {
+                    if (i < 5 && guess != grid_answers[index]) {
+                        cell.classList.add("open")
+                        cell.classList.remove("empty")
+                    }
+                })
+                if (guess == grid_answers[index]) {
+                    table.classList.add("completed");
+                }
+            })
+            cells.forEach((cell) => {
+                cell.classList.remove("open")
+                cell.classList.add("clue")
+            })
+            guess = ""
+            cursor = 0
+        } else {
+            alert("Invalid Word")
+        }
+    }
+}
+
+inp.addEventListener("keyup", (event) => {
     out.disabled = false
     let num = inp.value
     let one = Number(String(num).charAt(1))
@@ -42,6 +98,9 @@ out.addEventListener("click", () => {
         grid_answers.push(answers[Math.floor(Math.random() * answers.length)])
     })
     console.log(grid_answers)
+    document.body.addEventListener('keydown', (event) => {
+        keyPress(event.key);
+    })
 })
 
 document.querySelector("#start").addEventListener("transitionend", () => {
@@ -92,48 +151,7 @@ let cursor = 0
 let guess = ''
 document.querySelectorAll(".key").forEach((el) => {
     el.addEventListener("click", (event) => {
-        let k = event.target.innerText
-        let cells = document.querySelectorAll(".open")
-        let i = 0
-        if (!event.target.classList.contains("wide") && cursor < 5) {
-            cells.forEach((cell) => {
-                if (i % 5 == cursor) {
-                    cell.innerText = k
-                }
-                i++
-            })
-            guess += k.toLowerCase()
-            cursor++
-        } else if (event.target.id == "backspace" && cursor > 0) {
-            cursor--
-            cells.forEach((cell) => {
-                if (i % 5 == cursor) {
-                    cell.innerText = "";
-                }
-                i++
-            })
-            guess = guess.slice(0, -1)
-        } else if (event.target.id == "return" && cursor == 5) {
-            if (answers.includes(guess)) {
-                document.querySelectorAll("table").forEach((table, index) => {
-                    markWord(guess, grid_answers[index], table)
-                    table.querySelectorAll(".empty").forEach((cell, i) => {
-                        if (i < 5) {
-                            cell.classList.add("open")
-                            cell.classList.remove("empty")
-                        }
-                    })
-                })
-                cells.forEach((cell) => {
-                    cell.classList.remove("open")
-                    cell.classList.remove("clue")
-                })
-                guess = ""
-                cursor = 0
-            } else {
-                alert("Invalid Word")
-            }
-        }
+        keyPress(event.target.id);
     })
 })
 
