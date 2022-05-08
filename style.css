@@ -4,6 +4,10 @@
 body {
     background: #111;
     touch-action: manipulation;
+    overflow: hidden;
+}
+body.anim {
+    overflow: unset;
 }
 * {
     color: white;
@@ -19,8 +23,6 @@ input {
     padding-left: 3vw;
 }
 #main {
-    width: 100vw;
-    height: 100vw;
     text-align: center;
 }
 p {
@@ -39,6 +41,14 @@ button#nameout {
 button:disabled {
     color: #777
 }
+#gamediv {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-start;
+    margin-top: 200vh;
+}
 #gamediv.anim {
     margin-top: unset;
     transition: ease-in-out 1.2s;
@@ -49,7 +59,7 @@ button:disabled {
     position: absolute;
 }
 td {
-    width: 8vw;
+    width: 7.8vw;
     height: 8.5vw;
     border: 1px solid #aaa;
     text-align: center;
@@ -66,14 +76,6 @@ td.clue {
 table {
     display: inline-block;
     margin-bottom: 3vh;
-}
-#gamediv {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    justify-content: space-evenly;
-    align-items: flex-start;
-    margin-top: 200vh;
 }
 #subtitle {
     display: inline-block;
@@ -127,4 +129,61 @@ button.key.wide {
 }
 button.key.used {
     background-color: #3c3c3c;
+}
+@media not screen and (max-device-width: 480px) {
+    #title {
+        font-size: 4vw;
+    }
+    p {
+        font-size: 1.5vw;
+    }
+    input {
+        width: 50vw;
+        height: 8vh;
+        font-size: 2.5vw;
+        padding-left: 2vw;
+    }
+    button#nameout {
+        width: 40vw;
+        height: 15vh;
+        font-size: 2.5vw;
+        background: #333;
+    }
+    #subtitle {
+        font-size: 1.5vw;
+        margin-bottom: 2vh;
+    }
+    td {
+        width: 2vw;
+        height: 2.75vw;
+        font-size: 2vw;
+    }
+    td.empty {
+        height: 1vw;
+    }
+    td.clue {
+        font-size: 2vw;
+        height: 2.75vw;
+    }
+    table {
+        margin: .5vw;
+    }
+    #keyboard {
+        width: 40vw;
+        height: 25vh;
+        border-right: 1vh solid #666;
+        border-radius: 0 20px 0 0;
+    }
+    button.key {
+        width: 3.5vw;
+        height: 4.2vw;
+        margin: 0.2vw;
+        font-size: 2.2vw;
+    }
+    div.row {
+        height: auto;
+    }
+    #spacer {
+        display: none;
+    }
 }
