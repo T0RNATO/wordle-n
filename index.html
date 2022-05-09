@@ -1,5 +1,6 @@
 <head>
     <script src="script.js" defer></script>
+    <script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js></script>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,7 +16,8 @@
         <div id="start">
             <p>wordle<sup>&#119899;</sup> is a game similar to Wordle, Dordle, and Quordle, but where you can pick exactly the number of boards you want to have. Simply type the number in, and hit Play! (Max 100 Boards)</p> <br>
             <input type="number" id="boardnum" value="2" max="99"> <br>
-            <button id="nameout">Play the daily Duordle</button><br>
+            <button id="daily" class="play">Play the daily Duordle</button><br>
+            <button id="practice" class="play">Play a practice Duordle</button><br>
         </div>
 
         <div id="keyboard">
@@ -58,5 +60,9 @@
         <div id="gamediv"></div>
         <div id="spacer"></div>
         
+        <div id="win">
+            <h1>You WON!</h1>
+            <span id="winContent"></span>
+        </div>
     </div>
 </body>

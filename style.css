@@ -32,7 +32,7 @@ p {
     font-size: 4vw;
     margin-top: 0px;
 }
-button#nameout {
+button.play {
     width: 70vw;
     height: 10vh;
     font-size: 6vw;
@@ -124,11 +124,28 @@ button.key.wide {
     flex-grow: 2;
 }
 #spacer {
-    width: 100vw;
     height: 33vh;
 }
 button.key.used {
     background-color: #3c3c3c;
+    color: #444;
+}
+#win {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #444;
+    opacity: 0;
+    display: none;
+}
+#win.anim {
+    display: unset;
+    transition: opacity 1s ease-in-out;
+}
+#win.anim2 {
+    opacity: 1;
 }
 @media not screen and (max-device-width: 480px) {
     #title {
@@ -143,7 +160,7 @@ button.key.used {
         font-size: 2.5vw;
         padding-left: 2vw;
     }
-    button#nameout {
+    button.play {
         width: 40vw;
         height: 15vh;
         font-size: 2.5vw;
@@ -183,7 +200,14 @@ button.key.used {
     div.row {
         height: auto;
     }
-    #spacer {
-        display: none;
+    #win {
+        width: 40vw;
+        height: 85vh;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        top: 50%;
+        border-radius: 5vw;
+        border: 0.5vw solid #666;
+        box-shadow: 0 3vh 5vh #222;
     }
 }

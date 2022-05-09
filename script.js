@@ -5,7 +5,7 @@ var allowed = ["aahed", "aalii", "aargh", "aarti", "abaca", "abaci", "abacs", "a
 
 setTimeout(() => { window.scrollTo(0, 0); }, 200);
 var inp = document.querySelector("input")
-var out = document.querySelector("#nameout")
+var gamemode = "";
 
 var grid_answers = []
 
@@ -61,6 +61,14 @@ function keyPress(key) {
             })
             guess = ""
             cursor = 0
+            if (document.querySelectorAll("table:not(.completed)").length == 0) {
+                let win = document.querySelector("#win");
+                win.querySelector("#winContent").innerText = "You won a practice " + gamemode + "!"
+                win.classList.add("anim");
+                setTimeout(() => {
+                    win.classList.add("anim2");
+                }, 10);
+            }
         } else {
             cells.forEach((cell) => {
                 cell.innerText = "";
@@ -71,30 +79,47 @@ function keyPress(key) {
     }
 }
 
+function updatebuttons() {
+    let prac = document.querySelector("#practice");
+    let daily = document.querySelector("#daily");
+    if (gamemode == "d") {
+        prac.innerText = "Play practice";
+        daily.innerText = "Play daily";
+        prac.disabled = true;
+        daily.disabled = true;
+    } else {
+        prac.innerText = "Play a practice " + gamemode;
+        daily.innerText = "Play the daily " + gamemode;
+        prac.disabled = false;
+        daily.disabled = false;
+    }
+}
+
 inp.addEventListener("keyup", (event) => {
-    out.disabled = false
     let num = inp.value;
     let one = Number(String(num).charAt(1))
     let ten = Number(String(num).charAt(0))
     if (num == "1") {
-        out.innerText = "Play the daily Wordle"
+        gamemode = "Wordle";
     } else if (num == "100") {
-        out.innerText = "Play the daily Centordle"
+        gamemode = "Centordle";
     }else if (num.charAt(0) == "0" || num.includes("-") || num.includes(".") || num.includes("e") || num.length > 2 || num.length == 0) {
-        out.innerText = "Play"
-        out.disabled = true
+        gamemode = "d";
     } else {
         if (num.length == 2) {
             let wordle = ones[one] + (one > 3 ? "a" : "") + tens[ten] + "ordle"
-            wordle = wordle.charAt(0).toUpperCase() + wordle.slice(1)
-            out.innerText = "Play the daily " + wordle
+            gamemode = wordle.charAt(0).toUpperCase() + wordle.slice(1)
         } else if (num.length == 1){
-            out.innerText = "Play the daily " + ones[num].charAt(0).toUpperCase() + ones[num].slice(1) + "ordle"
+            gamemode = ones[num].charAt(0).toUpperCase() + ones[num].slice(1) + "ordle"
         }
     }
+    updatebuttons()
 })
 
-out.addEventListener("click", () => {
+function play(type) {
+    if (type == "daily") {
+        Math.seedrandom(Math.floor((((Date.now() / 1000) / 60) / 60) / 24));
+    }
     let g = Number(inp.value)
     document.querySelector("#subtitle").classList.add("anim")
     document.querySelector("#start").classList.add("anim")
@@ -109,12 +134,15 @@ out.addEventListener("click", () => {
     document.body.addEventListener('keydown', (event) => {
         keyPress(event.key);
     })
-})
+}
+
+document.querySelector("#daily").addEventListener("click", () => {play("daily")});
+document.querySelector("#practice").addEventListener("click", () => {play("practice")});
 
 document.querySelector("#start").addEventListener("transitionend", () => {
     document.querySelector("#keyboard").classList.add("anim")
     document.querySelector("#start").remove()
-    document.querySelector("#subtitle").innerText = out.innerText.split(" ")[3]
+    document.querySelector("#subtitle").innerText = gamemode;
 })
 
 function markWord(guess, answer, table) {
