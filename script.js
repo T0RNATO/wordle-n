@@ -12,7 +12,7 @@ var grid_answers = []
 
 function win() {
     let win = document.querySelector("#win");
-    win.querySelector("#winContent").innerText = "You won " + gamemode + " " + gamename + "!"
+    win.querySelector("#winContent").innerText = "You won " + gamemode + " " + gamename + "! (Menu is WIP)";
     win.classList.add("anim");
     setTimeout(() => {
         win.classList.add("anim2");
