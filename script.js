@@ -8,11 +8,13 @@ var inp = document.querySelector("input")
 var gamename = "Duordle";
 var gamemode = undefined;
 
-var grid_answers = []
+var numofguesses = 0;
+
+var grid_answers = [];
 
 function win() {
     let win = document.querySelector("#win");
-    win.querySelector("#winContent").innerText = "You won " + gamemode + " " + gamename + "! (Menu is WIP)";
+    win.querySelector("#winContent").innerText = `You won ${gamemode} ${gamename}, in ${numofguesses} turns!`;
     win.classList.add("anim");
     setTimeout(() => {
         win.classList.add("anim2");
@@ -47,6 +49,7 @@ function keyPress(key) {
         })
         guess = guess.slice(0, -1)
     } else if (key.toLowerCase() == "enter" && cursor == 5) {
+        numofguesses++;
         if (allowed.includes(guess)) {
             document.querySelectorAll("table").forEach((table, index) => {
                 if (!table.classList.contains("completed")) {
@@ -146,6 +149,14 @@ function play(type) {
 
 document.querySelector("#daily").addEventListener("click", () => {play("daily")});
 document.querySelector("#practice").addEventListener("click", () => {play("practice")});
+
+document.querySelector("svg#close_win").addEventListener("click", () => {
+    let win = document.querySelector("#win");
+    win.classList.remove("anim2");
+    setTimeout(() => {
+        win.classList.remove("anim");
+    }, 250);
+})
 
 document.querySelector("#start").addEventListener("transitionend", () => {
     document.querySelector("#keyboard").classList.add("anim")
