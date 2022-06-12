@@ -2,7 +2,7 @@
     font-size: 15vw;
 }
 body {
-    background: #111;
+    background: rgb(7, 6, 13);
     touch-action: manipulation;
     overflow: hidden;
 }
@@ -25,7 +25,7 @@ input[type=number] {
 #main {
     text-align: center;
 }
-p {
+p#intro {
     width: 80vw;
     display: inline-block;
     text-align: left;
@@ -59,16 +59,43 @@ button:disabled {
     transition: ease-in-out 1s;
     position: absolute;
 }
+
+@keyframes appear {
+    0% {
+        font-size: 0;
+    }
+    90% {
+        font-size: 6.5vw;
+    }
+    100% {
+        font-size: 5.5vw;
+    }
+}
+
 td {
     width: 7.8vw;
     height: 8.5vw;
-    border: 1px solid #aaa;
+    background: rgb(84, 81, 101);
+    border-radius: 3px;
     text-align: center;
     font-size: 5.5vw;
     text-transform: capitalize;
+    transition: color 0.2s;
 }
+td.animate {
+    animation: appear 0.1s;
+}
+td.animate + td:not(.animate), td.open:first-of-type:not(.animate) {
+    background: rgb(127, 125, 144);
+}
+
+td.green {background: rgb(1, 135, 24);}
+td.yellow {background: rgb(192, 163, 0);}
+td.grey {background: rgb(72, 70, 87);}
+
 td.empty {
     height: 3vw;
+    background-color: rgb(72, 70, 87);
 }
 td.clue {
     height: 4vw;
@@ -90,8 +117,8 @@ table {
 }
 #keyboard {
     position: fixed;
-    background: #444;
-    border-top: 1vh solid #666;
+    background: rgb(65, 64, 74);
+    border-top: 1vh solid rgb(90, 88, 114);
     width: 100%;
     height: 30vh;
     bottom: -100vh;
@@ -110,6 +137,7 @@ div.row {
     height: 10vh;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 button.key {
     width: 9vw;
@@ -119,7 +147,7 @@ button.key {
     padding: 0;
     border-radius: 20% / 10%;
     margin: 0.5vw;
-    border: 0.4vw solid #4d4d4d;
+    border: 0.1vw solid rgba(0, 0, 0, 0.11);
 }
 button.key.wide {
     flex-grow: 2;
@@ -128,11 +156,10 @@ button.key.wide {
     height: 33vh;
 }
 button.key.used {
-    background-color: #3c3c3c;
-    color: #999;
-    border-color: #4a4a4a;
+    filter: brightness(40%);
 }
-#win {
+#win, #settings {
+    padding: 0 10px;
     width: 100%;
     height: 100%;
     position: fixed;
@@ -142,23 +169,26 @@ button.key.used {
     opacity: 0;
     display: none;
 }
-#win.anim {
+#win.anim, #settings.anim {
     display: unset;
     transition: opacity 0.2s ease-in-out;
 }
-#win.anim2 {
+#win.anim2, #settings.anim2 {
     opacity: 1;
 }
-#win svg {
+#win span.close, #settings span.close {
     width: 3vh;
-    filter: invert(0.15);
+    color: #222;
     position: absolute;
     top: 2vw;
     right: 2vw;
     cursor: pointer;
 }
-#win svg:hover {
-    filter: invert(0.05);
+#win span.close:hover, #settings span.close:hover {
+    color: #333;
+}
+select#keyloc {
+    display: none;
 }
 button#practice {
     display: none;
@@ -184,12 +214,59 @@ button {
     vertical-align: top;
     cursor: pointer;
 }
+#settingsbutton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color:rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+}
+#settings:hover {
+    color:rgba(255, 255, 255, 0.5);
+}
+p#settingsp {
+    text-align: left;
+    font-size: 22px;
+}
+select.setting {
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+    width: 80%;
+    color: black;
+    font-size: 20px;
+}
+.setting option {
+    color: black;
+    background: rgb(150, 150, 150);
+}
+tr.empty.c+tr.empty.c {
+    display: none;
+}
+tr.open.c+tr.empty.c td:last-child::after {
+    text-transform: lowercase;
+    font-size: 20px;
+    content: 'x' attr(data-guesses-left);
+}
 @media not screen and (max-device-width: 480px) { /* desktop view */
     #title {
         font-size: 4vw;
     }
-    p {
+    p#intro {
         font-size: 1.5vw;
+    }
+    select#keyloc {
+        display: unset;
+        background: transparent;
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        left: 8px;
+    }
+    #keyloc option {
+        font-family: 'Material Symbols Outlined';
+        font-size: 20px;
+        line-height: 1;
+        color: black;
     }
     input[type=number] {
         width: 50vw;
@@ -220,16 +297,27 @@ button {
         font-size: 1.5vw;
         margin-bottom: 2vh;
     }
+    @keyframes appear {
+        0% {
+            font-size: 1.5vw;
+        }
+        80% {
+            font-size: 2vw;
+        }
+        100% {
+            font-size: 1.8vw;
+        }
+    }
     td {
         width: 2vw;
         height: 2.75vw;
-        font-size: 2vw;
+        font-size: 1.8vw;
     }
     td.empty {
         height: 1vw;
     }
     td.clue {
-        font-size: 2vw;
+        font-size: 1.8vw;
         height: 2.75vw;
     }
     table {
@@ -238,8 +326,22 @@ button {
     #keyboard {
         width: 40vw;
         height: 25vh;
-        border-right: 1vh solid #666;
+        border-right: 1vh solid rgb(69, 66, 92);
         border-radius: 0 20px 0 0;
+    }
+    #keyboard.right {
+        border-radius: 20px 0 0 0;
+        left: unset;
+        right: 0;
+        border-left: 1vh solid rgb(69, 66, 92);
+        border-right: unset;
+    }
+    #keyboard.center {
+        border-radius: 20px 20px 0 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 1vh solid rgb(47, 47, 63);
+        border-right: 1vh solid rgb(69, 66, 92);
     }
     button.key {
         width: 3.5vw;
@@ -250,7 +352,7 @@ button {
     div.row {
         height: auto;
     }
-    #win {
+    #win, #settings {
         width: 40vw;
         height: 85vh;
         left: 50%;

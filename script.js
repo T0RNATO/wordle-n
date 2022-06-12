@@ -7,9 +7,10 @@ setTimeout(() => { window.scrollTo(0, 0); }, 200);
 var inp = document.querySelector("input")
 var gamename = "Duordle";
 var gamemode = undefined;
+var g = 0;
+var collapsecookie = false;
 
 var numofguesses = 0;
-
 var grid_answers = [];
 
 function win() {
@@ -22,12 +23,13 @@ function win() {
 }
 
 function keyPress(key) {
-    let cells = document.querySelectorAll(".open")
+    let cells = document.querySelectorAll("td.open")
     let i = 0
-    if (key.match(/([a-z]|[A-Z])/g) && cursor < 5 && key.length == 1) {
+    if (key.match(/([a-z]|[A-Z])/g) && guess.length < 5 && key.length == 1) {
         cells.forEach((cell) => {
             if (i % 5 == cursor) {
-                cell.innerText = key
+                cell.innerText = key;
+                cell.classList.add("animate");
             }
             i++
         })
@@ -38,33 +40,40 @@ function keyPress(key) {
                 cell.style.color = "red";
             })
         }
-    } else if (key.toLowerCase() == "backspace" && cursor > 0) {
+    } else if (key.toLowerCase() == "backspace" && guess.length > 0) {
         cursor--
         cells.forEach((cell) => {
             cell.style.color = "unset";
             if (i % 5 == cursor) {
                 cell.innerText = "";
+                cell.classList.remove("animate");
             }
             i++
         })
         guess = guess.slice(0, -1)
-    } else if (key.toLowerCase() == "enter" && cursor == 5) {
+    } else if (key.toLowerCase() == "enter" && guess.length == 5) { // if enter pressed
         numofguesses++;
-        if (allowed.includes(guess)) {
-            document.querySelectorAll("table").forEach((table, index) => {
-                if (!table.classList.contains("completed")) {
-                    markWord(guess, grid_answers[index], table)
-                    guess.split('').forEach((letter) => {
+        if (allowed.includes(guess)) { // if the guess is legal
+            document.querySelectorAll("tr.open").forEach((tr) => {
+                tr.classList.remove("open");
+                tr.classList.add("clue");
+            })
+            document.querySelectorAll("table").forEach((table, index) => { // loop through tables
+                if (!table.classList.contains("completed")) { // if the table hasn't had its word guessed
+                    markWord(guess, grid_answers[index], table) // mark the guess against each table's answer
+                    guess.split('').forEach((letter) => { // grey out used letters on keyboard
                         document.querySelector("#" + letter).classList.add('used');
                     })
-                    table.querySelectorAll(".empty").forEach((cell, i) => {
-                        if (i < 5 && guess != grid_answers[index]) {
-                            cell.classList.add("open")
-                            cell.classList.remove("empty")
+                    table.querySelectorAll("td.empty").forEach((cell, i) => { // loop through the empty cells of the table,
+                        if (i < 5 && guess != grid_answers[index]) { // get the first five,
+                            cell.classList.add("open"); // and update their classes
+                            cell.classList.remove("empty");
                         }
                     })
-                    if (guess == grid_answers[index]) {
-                        table.classList.add("completed");
+                    table.querySelector("tr.empty").classList.add("open");
+                    table.querySelector("tr.empty").classList.remove("empty");
+                    if (guess == grid_answers[index]) { // if the guess was right for this table,
+                        table.classList.add("completed"); // mark it as completed
                     }
                 }
             })
@@ -77,12 +86,16 @@ function keyPress(key) {
             if (document.querySelectorAll("table:not(.completed)").length == 0) {
                 win();
             }
+            document.querySelectorAll("tr.open+tr.empty td:last-child").forEach((el) => {
+                el.setAttribute("data-guesses-left", g - numofguesses);
+            })
         } else {
             cells.forEach((cell) => {
                 cell.innerText = "";
                 cursor = 0;
                 cell.style.color = "unset";
             })
+            guess = "";
         }
     }
 }
@@ -131,10 +144,10 @@ function play(type) {
     } else if (type == "practice") {
         gamemode = "a practice";
     }
-    let g = Number(inp.value)
+    g = Number(inp.value) + 5;
     document.querySelector("#subtitle").classList.add("anim")
     document.querySelector("#start").classList.add("anim")
-    document.querySelector("#gamediv").innerHTML = ("<table class='game'>" + ("<tr>" + "<td class='open'></td>".repeat(5) + "</tr>") + ("<tr>" + "<td class='empty'></td>".repeat(5) + "</tr>").repeat(g + 5) + "</table>").repeat(g)
+    document.querySelector("#gamediv").innerHTML = ("<table class='game'>" + ("<tr class='open'>" + "<td class='open'></td>".repeat(5) + "</tr>") + ("<tr class='empty'>" + "<td class='empty'></td>".repeat(5) + "</tr>").repeat(g) + "</table>").repeat(g - 5)
     document.querySelectorAll("table").forEach((el, index) => {
         el.id = index;
         grid_answers.push(answers[Math.floor(Math.random() * answers.length)]);
@@ -145,17 +158,78 @@ function play(type) {
     document.body.addEventListener('keydown', (event) => {
         keyPress(event.key);
     })
+    document.querySelectorAll("tr.open+tr.empty td:last-child").forEach((el) => {
+        el.setAttribute("data-guesses-left", g - numofguesses);
+    })
+    if (collapsecookie === 'true') {
+        document.querySelectorAll("tr").forEach((el) => {
+            el.classList.add("c");
+        })
+    }
 }
+
+if (document.cookie != '') {
+    let cookies = document.cookie.replace(/\s+/g, '').split(";");
+    let keyboardcookie = cookies.find(row => row.startsWith('keyboard=')).split('=')[1];
+    document.querySelector("#keyboard").classList.add(keyboardcookie);
+    document.querySelector("select#kpos").value = keyboardcookie;
+    collapsecookie = cookies.find(row => row.startsWith('collapse=')).split('=')[1];
+    if (collapsecookie === 'true') {
+        document.querySelector("select#collapse").value = "collapse";
+    } else {
+        document.querySelector("select#collapse").value = "show";
+    }
+} else {
+    document.cookie = `keyboard=left; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
+    document.cookie = `collapse=false; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
+}
+
+document.querySelectorAll("select#keyloc, select#kpos").forEach((el) => {
+    el.addEventListener("input", (e) => {
+        document.querySelector("#keyboard").classList.remove("left");
+        document.querySelector("#keyboard").classList.remove("right");
+        document.querySelector("#keyboard").classList.remove("center");
+        document.querySelector("#keyboard").classList.add(e.target.value);
+        document.cookie = `keyboard=${e.target.value}; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
+    })
+})
+document.querySelector("select#collapse").addEventListener("click", (e) => {
+    if (e.target.value == "collapse") {
+        document.cookie = `collapse=true; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
+        document.querySelectorAll("tr").forEach((el) => {
+            el.classList.add("c");
+        })
+    } else if (e.target.value == "show") {
+        document.cookie = `collapse=false; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
+        document.querySelectorAll("tr").forEach((el) => {
+            el.classList.remove("c");
+        })
+    }
+})
 
 document.querySelector("#daily").addEventListener("click", () => {play("daily")});
 document.querySelector("#practice").addEventListener("click", () => {play("practice")});
 
-document.querySelector("svg#close_win").addEventListener("click", () => {
+document.querySelector("#win span.close").addEventListener("click", () => {
     let win = document.querySelector("#win");
     win.classList.remove("anim2");
     setTimeout(() => {
         win.classList.remove("anim");
     }, 250);
+})
+document.querySelector("#settings span.close").addEventListener("click", () => {
+    let popup = document.querySelector("#settings");
+    popup.classList.remove("anim2");
+    setTimeout(() => {
+        popup.classList.remove("anim");
+    }, 250);
+})
+document.querySelector("#settingsbutton").addEventListener("click", () => {
+    let popup = document.querySelector("#settings");
+    popup.classList.add("anim");
+    setTimeout(() => {
+        popup.classList.add("anim2");
+    }, 10);
 })
 
 document.querySelector("#start").addEventListener("transitionend", () => {
@@ -165,12 +239,12 @@ document.querySelector("#start").addEventListener("transitionend", () => {
 })
 
 function markWord(guess, answer, table) {
-    let cells = table.querySelectorAll(".open");
+    let cells = table.querySelectorAll("td.open");
     let greens = [];
         let nonGreens = []; // List of characters that still need to be processed
         for (let i = 0; i < 5; i++) { // Loop through chars of guess
             if (guess.charAt(i) == answer.charAt(i)) { // If the char is in the right place and letter
-                col(cells[i], "#009124"); // Make it green
+                col(cells[i], "green"); // Make it green
                 greens.push(guess.charAt(i)); // And add it to the list of greens
                 nonGreens.push("");
             } else {
@@ -185,19 +259,19 @@ function markWord(guess, answer, table) {
                 if (greens.includes(c)) { // If the char is a duplicate of a correct letter
                     if (answer.split(c).length > 2 // If there's more than 2 of the char...
                      && yellows.concat(greens).filter(x => x==c).length < answer.split(c).length - 1) { // And the number of the char already processed is smaller than the number of the char in the actual word
-                        col(cells[i], "#fcba03") // Set the cell to yellow
+                        col(cells[i], "yellow") // Set the cell to yellow
                         yellows.push(c) // Add the char to the list of yellow cells
                     } else {
-                        col(cells[i], "#737373") // Else, make it grey
+                        col(cells[i], "grey") // Else, make it grey
                     }
                 } else if (yellows.concat(greens).filter(x => x==c).length < answer.split(c).length - 1) { // If the number of the char already processed is smaller than the number of the char in the actual word
-                    col(cells[i], "#fcba03") // Set the cell to yellow
+                    col(cells[i], "yellow") // Set the cell to yellow
                     yellows.push(c) // Add the char to the list of yellow cells
                 } else {
-                    col(cells[i], "#737373") // Else, make it grey
+                    col(cells[i], "grey") // Else, make it grey
                 }
             } else if (!answer.includes(c)) {
-                col(cells[i], "#737373") // If the char is not in the answer, make the cell grey
+                col(cells[i], "grey") // If the char is not in the answer, make the cell grey
             }
         }
 }
@@ -211,5 +285,5 @@ document.querySelectorAll(".key").forEach((el) => {
 })
 
 function col(el, colour) { // Function to set the bg colour of a cell
-    el.style.backgroundColor = colour;
+    el.classList.add(colour);
 }
