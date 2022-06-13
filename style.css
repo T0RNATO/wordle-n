@@ -1,5 +1,5 @@
 #title {
-    font-size: 15vw;
+    font-size: 50px;
 }
 body {
     background: rgb(7, 6, 13);
@@ -16,7 +16,7 @@ body.anim {
 input[type=number] {
     width: 70vw;
     height: 10vh;
-    font-size: 8vw;
+    font-size: 30px;
     background: #222;
     border: 2px solid #222;
     margin-bottom: 20px;
@@ -29,13 +29,13 @@ p#intro {
     width: 80vw;
     display: inline-block;
     text-align: left;
-    font-size: 4vw;
+    font-size: 20px;
     margin-top: 0px;
 }
 button.play {
     width: 70vw;
     height: 10vh;
-    font-size: 5vw;
+    font-size: 25px;
     background: #333;
     border: black 2px solid;
 }
@@ -65,27 +65,28 @@ button:disabled {
         font-size: 0;
     }
     90% {
-        font-size: 6.5vw;
+        font-size: 27px;
     }
     100% {
-        font-size: 5.5vw;
+        font-size: 22px;
     }
 }
 
 td {
-    width: 7.8vw;
-    height: 8.5vw;
+    width: 30px;
+    height: 35px;
     background: rgb(84, 81, 101);
     border-radius: 3px;
     text-align: center;
-    font-size: 5.5vw;
+    font-size: 22px;
     text-transform: capitalize;
     transition: color 0.2s;
 }
+
 td.animate {
     animation: appear 0.1s;
 }
-td.animate + td:not(.animate), td.open:first-of-type:not(.animate) {
+td.animate + td:not(.animate), td.open:first-of-type:not(.animate) { /* cursor */
     background: rgb(127, 125, 144);
 }
 
@@ -94,12 +95,11 @@ td.yellow {background: rgb(192, 163, 0);}
 td.grey {background: rgb(72, 70, 87);}
 
 td.empty {
-    height: 3vw;
+    height: 10px;
     background-color: rgb(72, 70, 87);
 }
 td.clue {
-    height: 4vw;
-    font-size: 4vw;
+    height: 30px;
 }
 table {
     display: inline-block;
@@ -108,7 +108,7 @@ table {
 #subtitle {
     display: inline-block;
     transform: translateX(-200vw);
-    font-size: 4.5vw;
+    font-size: 18px;
     margin-bottom: 2vh;
 }
 #subtitle.anim {
@@ -176,15 +176,16 @@ button.key.used {
 #win.anim2, #settings.anim2 {
     opacity: 1;
 }
-#win span.close, #settings span.close {
+span.close {
     width: 3vh;
     color: #222;
     position: absolute;
-    top: 2vw;
-    right: 2vw;
+    top: 10px;
+    right: 35px;
     cursor: pointer;
+    font-size: 30px;
 }
-#win span.close:hover, #settings span.close:hover {
+span.close:hover {
     color: #333;
 }
 select#keyloc {
@@ -239,28 +240,25 @@ select.setting {
     color: black;
     background: rgb(150, 150, 150);
 }
-tr.empty.c+tr.empty.c {
+tr.empty.c + tr.empty.c {
     display: none;
 }
-tr.open.c+tr.empty.c td:last-child::after {
+tr.open.c + tr.empty.c td:last-child::after {
     text-transform: lowercase;
-    font-size: 20px;
+    font-size: 13px;
     content: 'x' attr(data-guesses-left);
 }
+table.completed tr.empty.c {
+    display: none;
+}
 @media not screen and (max-device-width: 480px) { /* desktop view */
-    #title {
-        font-size: 4vw;
-    }
-    p#intro {
-        font-size: 1.5vw;
-    }
     select#keyloc {
         display: unset;
         background: transparent;
         position: absolute;
-        width: 20px;
-        height: 20px;
-        left: 8px;
+        width: 1.5vw;
+        height: 1.5vw;
+        left: 0.6vw;
     }
     #keyloc option {
         font-family: 'Material Symbols Outlined';
@@ -271,7 +269,6 @@ tr.open.c+tr.empty.c td:last-child::after {
     input[type=number] {
         width: 50vw;
         height: 8vh;
-        font-size: 2.5vw;
         padding-left: 2vw;
     }
     label {
@@ -289,36 +286,11 @@ tr.open.c+tr.empty.c td:last-child::after {
     button.play {
         width: 20vw;
         height: 10vh;
-        font-size: 2vw;
         background: #333;
         margin: auto 0;
     }
     #subtitle {
-        font-size: 1.5vw;
         margin-bottom: 2vh;
-    }
-    @keyframes appear {
-        0% {
-            font-size: 1.5vw;
-        }
-        80% {
-            font-size: 2vw;
-        }
-        100% {
-            font-size: 1.8vw;
-        }
-    }
-    td {
-        width: 2vw;
-        height: 2.75vw;
-        font-size: 1.8vw;
-    }
-    td.empty {
-        height: 1vw;
-    }
-    td.clue {
-        font-size: 1.8vw;
-        height: 2.75vw;
     }
     table {
         margin: .5vw;
@@ -361,5 +333,9 @@ tr.open.c+tr.empty.c td:last-child::after {
         border-radius: 5vw;
         border: 0.5vw solid #666;
         box-shadow: 0 3vh 5vh #222;
+    }
+    span.close {
+        top: 30px;
+        right: 30px;
     }
 }

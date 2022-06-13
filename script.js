@@ -5,7 +5,7 @@ var allowed = ["aahed", "aalii", "aargh", "aarti", "abaca", "abaci", "abacs", "a
 
 setTimeout(() => { window.scrollTo(0, 0); }, 200);
 var inp = document.querySelector("input")
-var gamename = "Duordle";
+var gamename = "Tetradecordle";
 var gamemode = undefined;
 var g = 0;
 var collapsecookie = false;
@@ -70,10 +70,11 @@ function keyPress(key) {
                             cell.classList.remove("empty");
                         }
                     })
-                    table.querySelector("tr.empty").classList.add("open");
-                    table.querySelector("tr.empty").classList.remove("empty");
                     if (guess == grid_answers[index]) { // if the guess was right for this table,
                         table.classList.add("completed"); // mark it as completed
+                    } else {
+                        table.querySelector("tr.empty").classList.add("open");
+                        table.querySelector("tr.empty").classList.remove("empty");
                     }
                 }
             })
