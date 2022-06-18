@@ -234,12 +234,18 @@ function updateSetting(setting, value) {
 }
 
 function getSetting(setting) {
-    if (document.cookie.includes(setting)) {
-        let cookies = document.cookie.replace(/\s+/g, '').split(";");
-        return cookies.find(row => row.startsWith(`${setting}=`)).split('=')[1];
-    } else {
-        updateSetting(setting, defaultsettings[setting]);
-        return defaultsettings[setting];
+    if (document.cookie.includes(setting)) { // if setting has a value
+        let cookies = document.cookie.replace(/\s+/g, '').split(";"); // get array of cookies
+        let value = cookies.find(row => row.startsWith(`${setting}=`)).split('=')[1]; // get saved value of the setting
+        if (document.querySelector(`select[data-settingname='${setting}']`).dataset.allowed.includes(value)) { // check if the saved value is legal
+            return value; // return the saved value
+        } else { // if setting is not legal,
+            updateSetting(setting, defaultsettings[setting]); // set it to the default
+            return defaultsettings[setting]; // and return that
+        }
+    } else { // else if setting has no value
+        updateSetting(setting, defaultsettings[setting]); // set it to the default
+        return defaultsettings[setting]; // and return that
     }
 }
 
@@ -252,23 +258,16 @@ var defaultsettings = {
 
 for (let setting of Object.keys(defaultsettings)) { // loop through settings
     updateSetting(setting, getSetting(setting)); // create cookie if it doesn't exist
-    document.querySelector(`select[data-settingname='${setting}']`).addEventListener("input", (e) => {
-        updateSetting(e.target.dataset.settingname, e.target.value);
+    document.querySelector(`select[data-settingname='${setting}']`).addEventListener("input", (e) => { // add an event listener to each settings dropdown
+        updateSetting(e.target.dataset.settingname, e.target.value); // and when it changes, update the respective setting
     })
 }
 
 document.querySelector("#daily").addEventListener("click", () => {play("daily")});
 document.querySelector("#practice").addEventListener("click", () => {play("practice")});
 
-document.querySelector("#win span.close").addEventListener("click", () => {
-    let win = document.querySelector("#win");
-    win.classList.remove("anim2");
-    setTimeout(() => {
-        win.classList.remove("anim");
-    }, 250);
-})
-document.querySelector("#settings span.close").addEventListener("click", () => {
-    let popup = document.querySelector("#settings");
+document.querySelector("span.close").addEventListener("click", (e) => {
+    let popup = e.target.parentElement;
     popup.classList.remove("anim2");
     setTimeout(() => {
         popup.classList.remove("anim");
