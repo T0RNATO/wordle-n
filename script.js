@@ -266,12 +266,14 @@ for (let setting of Object.keys(defaultsettings)) { // loop through settings
 document.querySelector("#daily").addEventListener("click", () => {play("daily")});
 document.querySelector("#practice").addEventListener("click", () => {play("practice")});
 
-document.querySelector("span.close").addEventListener("click", (e) => {
-    let popup = e.target.parentElement;
-    popup.classList.remove("anim2");
-    setTimeout(() => {
-        popup.classList.remove("anim");
-    }, 250);
+document.querySelectorAll("span.close").forEach((el) => {
+    el.addEventListener("click", (e) => {
+        let popup = e.target.parentElement;
+        popup.classList.remove("anim2");
+        setTimeout(() => {
+            popup.classList.remove("anim");
+        }, 250);
+    })
 })
 document.querySelector("#settingsbutton").addEventListener("click", () => {
     let popup = document.querySelector("#settings");
