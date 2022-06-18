@@ -80,7 +80,7 @@ td {
     text-align: center;
     font-size: 22px;
     text-transform: capitalize;
-    transition: color 0.2s;
+    transition: all 0.2s;
 }
 
 td.animate {
