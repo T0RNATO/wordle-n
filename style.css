@@ -155,7 +155,7 @@ button.key.wide {
 #spacer {
     height: 33vh;
 }
-button.key.used {
+button.key.used.u, button.key.used.n {
     filter: brightness(40%);
 }
 #win, #settings {

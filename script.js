@@ -8,7 +8,6 @@ var inp = document.querySelector("input")
 var gamename = "Tetradecordle";
 var gamemode = undefined;
 var g = 0;
-var collapsecookie = false;
 
 var numofguesses = 0;
 var grid_answers = [];
@@ -61,9 +60,6 @@ function keyPress(key) {
             document.querySelectorAll("table").forEach((table, index) => { // loop through tables
                 if (!table.classList.contains("completed")) { // if the table hasn't had its word guessed
                     markWord(guess, grid_answers[index], table) // mark the guess against each table's answer
-                    guess.split('').forEach((letter) => { // grey out used letters on keyboard
-                        document.querySelector("#" + letter).classList.add('used');
-                    })
                     table.querySelectorAll("td.empty").forEach((cell, i) => { // loop through the empty cells of the table,
                         if (i < 5 && guess != grid_answers[index]) { // get the first five,
                             cell.classList.add("open"); // and update their classes
@@ -75,6 +71,20 @@ function keyPress(key) {
                     } else {
                         table.querySelector("tr.empty").classList.add("open");
                         table.querySelector("tr.empty").classList.remove("empty");
+                    }
+                }
+            })
+            guess.split('').forEach((letter) => { // grey out used letters on keyboard
+                document.querySelector("#" + letter).classList.add('used');
+                if (getSetting("greyout") == "used") {
+                    document.querySelector("#" + letter).classList.add('u');
+                }
+            })
+            document.querySelectorAll(".used").forEach((el) => {
+                if (grid_answers.every(e => !e.includes(el.innerText.toLowerCase()))) {
+                    el.classList.add('notinword');
+                    if (getSetting("greyout") == "notinwords") {
+                        el.classList.add('n');
                     }
                 }
             })
@@ -90,6 +100,7 @@ function keyPress(key) {
             document.querySelectorAll("tr.open+tr.empty td:last-child").forEach((el) => {
                 el.setAttribute("data-guesses-left", g - numofguesses);
             })
+            
         } else {
             cells.forEach((cell) => {
                 cell.innerText = "";
@@ -162,51 +173,89 @@ function play(type) {
     document.querySelectorAll("tr.open+tr.empty td:last-child").forEach((el) => {
         el.setAttribute("data-guesses-left", g - numofguesses);
     })
-    if (collapsecookie === 'true') {
+    if (settings["collapse"] == "collapse") {
         document.querySelectorAll("tr").forEach((el) => {
             el.classList.add("c");
         })
     }
 }
 
-if (document.cookie != '') {
-    let cookies = document.cookie.replace(/\s+/g, '').split(";");
-    let keyboardcookie = cookies.find(row => row.startsWith('keyboard=')).split('=')[1];
-    document.querySelector("#keyboard").classList.add(keyboardcookie);
-    document.querySelector("select#kpos").value = keyboardcookie;
-    collapsecookie = cookies.find(row => row.startsWith('collapse=')).split('=')[1];
-    if (collapsecookie === 'true') {
-        document.querySelector("select#collapse").value = "collapse";
+function updateSetting(setting, value) {
+    document.cookie = `${setting}=${value}; expires=Tue, 19 Jan 2038 04:14:07 GMT`; // update saved setting
+    switch (setting) {
+        case "collapse": // if the setting changed is grid-collapse
+            document.querySelector("#collapse").value = value; // update the value of the dropdown
+            if (value == "collapse") {
+                document.querySelectorAll("tr").forEach((el) => { // loop through table rows
+                    el.classList.add("c");
+                })
+            } else if (value == "show") {
+                document.querySelectorAll("tr").forEach((el) => { // loop through table rows
+                    el.classList.remove("c");
+                })
+            }
+            break;
+        case "keyboard": // if the setting changed is the keyboard position
+            document.querySelector("#kpos").value = value; // update the values of the dropdowns
+            document.querySelector("#keyloc").value = value;
+
+            let kb = document.querySelector("#keyboard") // update keyboard position
+            kb.classList.remove("left");
+            kb.classList.remove("right");
+            kb.classList.remove("center");
+            kb.classList.add(value);
+            break;
+        case "greyout":
+            document.querySelector("#greyout").value = value;
+            switch (value) {
+                case "used":
+                    document.querySelectorAll(".key.used").forEach((el) => { // loop through table rows
+                        el.classList.add("u");
+                        el.classList.remove("n");
+                    })
+                    break;
+                case "notinwords":
+                    document.querySelectorAll(".key.used").forEach((el) => { // loop through table rows
+                        el.classList.remove("u");
+                    })
+                    document.querySelectorAll(".key.used.notinword").forEach((el) => { // loop through table rows
+                        el.classList.add("n");
+                    })
+                    break;
+                case "none":
+                    document.querySelectorAll(".key.used").forEach((el) => { // loop through table rows
+                        el.classList.remove("n");
+                        el.classList.remove("u");
+                    })
+                    break;
+            }
+            break;
+    }
+}
+
+function getSetting(setting) {
+    if (document.cookie.includes(setting)) {
+        let cookies = document.cookie.replace(/\s+/g, '').split(";");
+        return cookies.find(row => row.startsWith(`${setting}=`)).split('=')[1];
     } else {
-        document.querySelector("select#collapse").value = "show";
+        updateSetting(setting, defaultsettings[setting]);
+        return defaultsettings[setting];
     }
-} else {
-    document.cookie = `keyboard=left; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
-    document.cookie = `collapse=false; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
 }
 
-document.querySelectorAll("select#keyloc, select#kpos").forEach((el) => {
-    el.addEventListener("input", (e) => {
-        document.querySelector("#keyboard").classList.remove("left");
-        document.querySelector("#keyboard").classList.remove("right");
-        document.querySelector("#keyboard").classList.remove("center");
-        document.querySelector("#keyboard").classList.add(e.target.value);
-        document.cookie = `keyboard=${e.target.value}; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
+var settings = {};
+var defaultsettings = { 
+                        "collapse": "collapse",
+                        "keyboard": "left",
+                        "greyout": "used"
+                      };
+
+for (let setting of Object.keys(defaultsettings)) { // loop through settings
+    updateSetting(setting, getSetting(setting)); // create cookie if it doesn't exist
+    document.querySelector(`select[data-settingname='${setting}']`).addEventListener("input", (e) => {
+        updateSetting(e.target.dataset.settingname, e.target.value);
     })
-})
-document.querySelector("select#collapse").addEventListener("click", (e) => {
-    if (e.target.value == "collapse") {
-        document.cookie = `collapse=true; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
-        document.querySelectorAll("tr").forEach((el) => {
-            el.classList.add("c");
-        })
-    } else if (e.target.value == "show") {
-        document.cookie = `collapse=false; expires=Tue, 19 Jan 2038 04:14:07 GMT`;
-        document.querySelectorAll("tr").forEach((el) => {
-            el.classList.remove("c");
-        })
-    }
-})
+}
 
 document.querySelector("#daily").addEventListener("click", () => {play("daily")});
 document.querySelector("#practice").addEventListener("click", () => {play("practice")});

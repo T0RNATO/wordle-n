@@ -85,17 +85,24 @@
             <p id="settingsp">
                 Empty Grid Rows:
                 <br>
-                <select class="setting" id="collapse">
+                <select class="setting" id="collapse" data-settingname="collapse">
                     <option value="collapse">Collapse</option>
                     <option value="show">Show all empty rows</option>
                 </select>
                 <br>
                 Keyboard Position:
                 <br>
-                <select class="setting" id="kpos">
+                <select class="setting" id="kpos" data-settingname="keyboard">
                     <option value="left">Left</option>
                     <option value="center">Center</option>
                     <option value="right">Right</option>
+                </select>
+                Keyboard Letter Grey Out:
+                <br>
+                <select class="setting" id="greyout" data-settingname="greyout">
+                    <option value="used">Grey out letters once used</option>
+                    <option value="notinwords">Grey out letters that aren't in any word</option>
+                    <option value="none">Don't grey out letters</option>
                 </select>
             </p>
         </div>
