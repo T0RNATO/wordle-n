@@ -173,7 +173,7 @@ function play(type) {
     document.querySelectorAll("tr.open+tr.empty td:last-child").forEach((el) => {
         el.setAttribute("data-guesses-left", g - numofguesses);
     })
-    if (settings["collapse"] == "collapse") {
+    if (getSetting("collapse") == "collapse") {
         document.querySelectorAll("tr").forEach((el) => {
             el.classList.add("c");
         })
@@ -266,7 +266,7 @@ for (let setting of Object.keys(defaultsettings)) { // loop through settings
 document.querySelector("#daily").addEventListener("click", () => {play("daily")});
 document.querySelector("#practice").addEventListener("click", () => {play("practice")});
 
-document.querySelectorAll("span.close").forEach((el) => {
+ document.querySelectorAll("span.close").forEach((el) => {
     el.addEventListener("click", (e) => {
         let popup = e.target.parentElement;
         popup.classList.remove("anim2");
