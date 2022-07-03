@@ -21,23 +21,31 @@ input[type=number] {
     border: 2px solid #222;
     margin-bottom: 20px;
     padding-left: 3vw;
+    border-radius: 10px;
+    -moz-appearance: textfield;
 }
 #main {
     text-align: center;
 }
 p#intro {
-    width: 80vw;
+    width: 90vw;
     display: inline-block;
-    text-align: left;
-    font-size: 20px;
+    font-size: 16px;
     margin-top: 0px;
 }
 button.play {
     width: 70vw;
     height: 10vh;
-    font-size: 25px;
+    font-size: 20px;
     background: #333;
-    border: black 2px solid;
+    border: none;
+    border-radius: 10px;
+    margin-bottom: 5px;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 button:disabled {
     color: #777
@@ -158,30 +166,29 @@ button.key.wide {
 button.key.used.u, button.key.used.n {
     filter: brightness(40%);
 }
-#win, #settings {
-    padding: 0 10px;
-    width: 100%;
+.popup {
+    padding: 0 30px;
     height: 100%;
     position: fixed;
     top: 0;
     left: 0;
-    background: #444;
+    background: #585858;
     opacity: 0;
     display: none;
 }
-#win.anim, #settings.anim {
+.popup.anim {
     display: unset;
     transition: opacity 0.2s ease-in-out;
 }
-#win.anim2, #settings.anim2 {
+.popup.anim2 {
     opacity: 1;
 }
 span.close {
     width: 3vh;
-    color: #222;
+    color: #888;
     position: absolute;
-    top: 10px;
-    right: 35px;
+    top: 20px;
+    right: 30px;
     cursor: pointer;
     font-size: 30px;
 }
@@ -191,38 +198,27 @@ span.close:hover {
 select#keyloc {
     display: none;
 }
-button#practice {
-    display: none;
-    background-color: #777;
-}
-input[type=checkbox] {
-    position: absolute;
-    top: -1000vh;
-}
-input[type=checkbox]:checked ~ button {
-    display: inline-block !important;
-}
-label {
-    display: inline-block;
-    background-color: #555;
-    width: 10vw;
-    height: 9.5vh;
-    font-size: 6vw;
-    line-height: 9.5vh;
-    border: black 2px solid;
-}
 button {
     vertical-align: top;
     cursor: pointer;
 }
-#settingsbutton {
+.corner-button {
     position: absolute;
     top: 20px;
-    right: 20px;
     color:rgba(255, 255, 255, 0.3);
     cursor: pointer;
 }
-#settings:hover {
+#backbutton {
+    left: 20px;
+    display: none;
+}
+#backbutton.game {
+    display: unset;
+}
+#settingsbutton {
+    right: 20px;
+}
+.corner-button:hover {
     color:rgba(255, 255, 255, 0.5);
 }
 p#settingsp {
@@ -232,7 +228,7 @@ p#settingsp {
 select.setting {
     background: rgba(255, 255, 255, 0.5);
     border-radius: 5px;
-    width: 80%;
+    width: 100%;
     color: black;
     font-size: 20px;
 }
@@ -271,23 +267,16 @@ table.completed tr.empty.c {
         height: 8vh;
         padding-left: 2vw;
     }
-    label {
-        display: inline-block;
-        width: 3vw;
-        height: 9.5vh;
-        background-color: #555;
-        font-size: 2vw;
-        line-height: 9.5vh;
-        border: black 2px solid;
-    }
-    button#practice {
-        width: 23vw;
-    }
     button.play {
         width: 20vw;
         height: 10vh;
         background: #333;
-        margin: auto 0;
+        margin: 0;
+        border-radius: 10px 0 0 10px;
+    }
+    button#practice {
+        border-radius: 0 10px 10px 0;
+        border-left: 2px solid black;
     }
     #subtitle {
         margin-bottom: 2vh;
@@ -324,7 +313,7 @@ table.completed tr.empty.c {
     div.row {
         height: auto;
     }
-    #win, #settings {
+    .popup {
         width: 40vw;
         height: 85vh;
         left: 50%;
@@ -337,5 +326,9 @@ table.completed tr.empty.c {
     span.close {
         top: 30px;
         right: 30px;
+    }
+    p#intro {
+        width: 65vw;
+        font-size: 20px;
     }
 }
