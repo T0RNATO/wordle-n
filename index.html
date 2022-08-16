@@ -1,4 +1,7 @@
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <script src=//cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js></script>
@@ -92,7 +95,7 @@
                 <br>
                 Keyboard Position:
                 <br>
-                <select class="setting" id="kpos" data-settingname="keyboard" data-allowed="left center right">
+                <select class="setting" id="keyboard" data-settingname="keyboard" data-allowed="left center right">
                     <option value="left">Left</option>
                     <option value="center">Center</option>
                     <option value="right">Right</option>
@@ -104,7 +107,18 @@
                     <option value="notinwords">Grey out letters that aren't in any word</option>
                     <option value="none">Don't grey out letters</option>
                 </select>
+                Theme:
+                <br>
+                <select class="setting" id="theme" data-settingname="theme" data-allowed="chocolate forest hyperblue fairyfloss blackcurrant default">
+                    <option value="default">Default</option>
+                    <option value="chocolate">Chocolate</option>
+                    <option value="forest">Forest</option>
+                    <option value="hyperblue">Hyperblue</option>
+                    <option value="fairyfloss">Midnight Fairy Floss</option>
+                    <option value="blackcurrant">Blackcurrant</option>
+                </select>
             </p>
         </div>
     </div>
 </body>
+</html>

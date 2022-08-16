@@ -1,3 +1,15 @@
+html.chocolate {
+    filter: hue-rotate(123deg);
+}
+html.forest {
+    filter: hue-rotate(45deg);
+}
+html.hyperblue {
+    filter: saturate(6);
+}
+html.blackcurrant {
+    filter: saturate(3) hue-rotate(45deg);
+}
 #title {
     font-size: 50px;
 }
@@ -57,6 +69,7 @@ button:disabled {
     justify-content: space-evenly;
     align-items: flex-start;
     margin-top: 200vh;
+    align-items: stretch;
 }
 #gamediv.anim {
     margin-top: unset;
@@ -102,6 +115,19 @@ td.green {background: rgb(1, 135, 24);}
 td.yellow {background: rgb(192, 163, 0);}
 td.grey {background: rgb(72, 70, 87);}
 
+td.green.chocolate {background: rgb(135 72 1);}
+td.yellow.chocolate {background: rgb(255 48 244);}
+
+td.yellow.forest {background: rgb(154 129 74);}
+
+td.green.hyperblue {background: rgb(1 79 14);}
+
+td.green.fairyfloss {background: rgb(86 1 135);}
+td.yellow.fairyfloss {background: rgb(167 0 192);}
+
+td.green.blackcurrant {background: rgb(54 111 89);}
+td.yellow.blackcurrant {background: rgb(30 75 26);}
+
 td.empty {
     height: 10px;
     background-color: rgb(72, 70, 87);
@@ -112,6 +138,10 @@ td.clue {
 table {
     display: inline-block;
     margin-bottom: 3vh;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
+    border-radius: 5px;
+    outline: 2px solid rgb(50, 50, 50);
 }
 #subtitle {
     display: inline-block;
@@ -172,7 +202,7 @@ button.key.used.u, button.key.used.n {
     position: fixed;
     top: 0;
     left: 0;
-    background: #585858;
+    background: #2C2F33;
     opacity: 0;
     display: none;
 }
@@ -320,7 +350,7 @@ table.completed tr.empty.c {
         transform: translate(-50%, -50%);
         top: 50%;
         border-radius: 5vw;
-        border: 0.5vw solid #666;
+        border: 0.5vw solid #212529;
         box-shadow: 0 3vh 5vh #222;
     }
     span.close {
@@ -330,5 +360,15 @@ table.completed tr.empty.c {
     p#intro {
         width: 65vw;
         font-size: 20px;
+    }
+    ::-webkit-scrollbar {
+        width: 7px;
+    }
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(155, 155, 155, 0.5);
+        border: transparent;
     }
 }

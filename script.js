@@ -5,6 +5,7 @@ let allowed = ["aahed", "aalii", "aargh", "aarti", "abaca", "abaci", "abacs", "a
 
 setTimeout(() => { window.scrollTo(0, 0); }, 200);
 const $ = a => document.querySelector(a);
+const $$ = a => document.querySelectorAll(a);
 window.location.hash = "";
 
 let inp = $("input")
@@ -43,7 +44,7 @@ function closeMenu(popup) {
 }
 
 function keyPress(key) {
-    let cells = document.querySelectorAll("td.open")
+    let cells = $$("td.open")
     let i = 0
     if (key.match(/([a-z]|[A-Z])/g) && guess.length < 5 && key.length == 1) {
         cells.forEach((cell) => {
@@ -74,11 +75,11 @@ function keyPress(key) {
     } else if (key.toLowerCase() == "enter" && guess.length == 5) { // if enter pressed
         if (allowed.includes(guess)) { // if the guess is legal
             wordsguessed++;
-            document.querySelectorAll("tr.open").forEach((tr) => {
+            $$("tr.open").forEach((tr) => {
                 tr.classList.remove("open");
                 tr.classList.add("clue");
             })
-            document.querySelectorAll("table").forEach((table, index) => { // loop through non-completed tables
+            $$("table").forEach((table, index) => { // loop through non-completed tables
                 if (!table.classList.contains("completed")) {
                     markWord(guess, grid_answers[index], table) // mark the guess against each table's answer
                     table.querySelectorAll("td.empty").forEach((cell, i) => { // loop through the empty cells of the table,
@@ -104,7 +105,7 @@ function keyPress(key) {
                     $("#" + letter).classList.add('u');
                 }
             })
-            document.querySelectorAll(".used").forEach((el) => {
+            $$(".used").forEach((el) => {
                 if (grid_answers.every(e => !e.includes(el.innerText.toLowerCase()))) {
                     el.classList.add('notinword');
                     if (getSetting("greyout") == "notinwords") {
@@ -118,10 +119,10 @@ function keyPress(key) {
             })
             guess = ""
             cursor = 0
-            if (document.querySelectorAll("table:not(.completed)").length == 0) {
+            if ($$("table:not(.completed)").length == 0) {
                 openMenu("win");
             }
-            document.querySelectorAll("tr.open+tr.empty td:last-child").forEach((el) => {
+            $$("tr.open+tr.empty td:last-child").forEach((el) => {
                 el.setAttribute("data-guesses-left", totalguesses - wordsguessed);
             })
             
@@ -208,7 +209,7 @@ function play(type) {
     $("#start").classList.add("anim");
     $("#backbutton").classList.add("game");
     $("#gamediv").innerHTML = ("<table class='game'>" + ("<tr class='open'>" + "<td class='open'></td>".repeat(5) + "</tr>") + ("<tr class='empty'>" + "<td class='empty'></td>".repeat(5) + "</tr>").repeat(totalguesses) + "</table>").repeat(totalguesses - 5)
-    document.querySelectorAll("table").forEach((el, index) => {
+    $$("table").forEach((el, index) => {
         el.id = index;
         grid_answers.push(answers[Math.floor(Math.random() * answers.length)]);
     })
@@ -218,11 +219,11 @@ function play(type) {
     document.body.addEventListener('keydown', (event) => {
         keyPress(event.key);
     })
-    document.querySelectorAll("tr.open+tr.empty td:last-child").forEach((el) => {
+    $$("tr.open+tr.empty td:last-child").forEach((el) => {
         el.setAttribute("data-guesses-left", totalguesses - wordsguessed);
     })
     if (getSetting("collapse") == "collapse") {
-        document.querySelectorAll("tr").forEach((el) => {
+        $$("tr").forEach((el) => {
             el.classList.add("c");
         })
     }
@@ -230,21 +231,20 @@ function play(type) {
 
 function updateSetting(setting, value) {
     document.cookie = `${setting}=${value}; expires=Tue, 19 Jan 2038 04:14:07 GMT`; // update saved setting
+    $(`#${setting}`).value = value; // update setting in menu
     switch (setting) {
         case "collapse": // if the setting changed is grid-collapse
-            $("#collapse").value = value; // update the value of the dropdown
             if (value == "collapse") {
-                document.querySelectorAll("tr").forEach((el) => { // loop through table rows
+                $$("tr").forEach((el) => { // loop through table rows
                     el.classList.add("c");
                 })
             } else if (value == "show") {
-                document.querySelectorAll("tr").forEach((el) => { // loop through table rows
+                $$("tr").forEach((el) => { // loop through table rows
                     el.classList.remove("c");
                 })
             }
             break;
         case "keyboard": // if the setting changed is the keyboard position
-            $("#kpos").value = value; // update the values of the dropdowns
             $("#keyloc").value = value;
 
             let kb = $("#keyboard") // update keyboard position
@@ -254,29 +254,39 @@ function updateSetting(setting, value) {
             kb.classList.add(value);
             break;
         case "greyout":
-            $("#greyout").value = value;
             switch (value) {
                 case "used":
-                    document.querySelectorAll(".key.used").forEach((el) => { // loop through table rows
+                    $$(".key.used").forEach((el) => { // loop through table rows
                         el.classList.add("u");
                         el.classList.remove("n");
                     })
                     break;
                 case "notinwords":
-                    document.querySelectorAll(".key.used").forEach((el) => { // loop through table rows
+                    $$(".key.used").forEach((el) => { // loop through table rows
                         el.classList.remove("u");
                     })
-                    document.querySelectorAll(".key.used.notinword").forEach((el) => { // loop through table rows
+                    $$(".key.used.notinword").forEach((el) => { // loop through table rows
                         el.classList.add("n");
                     })
                     break;
                 case "none":
-                    document.querySelectorAll(".key.used").forEach((el) => { // loop through table rows
+                    $$(".key.used").forEach((el) => { // loop through table rows
                         el.classList.remove("n");
                         el.classList.remove("u");
                     })
                     break;
             }
+            break;
+        case "theme":
+            document.firstChild.classList.value = "";
+            document.firstChild.classList.add(value);
+            let themes = $("#theme").dataset.allowed.split(" ");
+            $$("td").forEach(el => {
+                themes.forEach(theme => {
+                    el.classList.remove(theme);
+                })
+                el.classList.add(value);
+            })
             break;
     }
 }
@@ -301,7 +311,8 @@ let settings = {};
 let defaultsettings = { 
                         "collapse": "collapse",
                         "keyboard": "left",
-                        "greyout": "used"
+                        "greyout": "used",
+                        "theme": "default"
                       };
 
 for (let setting of Object.keys(defaultsettings)) { // loop through settings
@@ -314,7 +325,7 @@ for (let setting of Object.keys(defaultsettings)) { // loop through settings
 $("#daily").addEventListener("click", () => {play("daily")});
 $("#practice").addEventListener("click", () => {play("practice")});
 
-document.querySelectorAll("span.close").forEach((el) => { // popup close buttons
+$$("span.close").forEach((el) => { // popup close buttons
     el.addEventListener("click", (e) => { // add an event listener to each button
         closeMenu(e.target.parentElement); // and when it is clicked, close the menu
     })
@@ -368,7 +379,7 @@ function markWord(guess, answer, table) {
 
 let cursor = 0
 let guess = ''
-document.querySelectorAll(".key").forEach((el) => {
+$$(".key").forEach((el) => {
     el.addEventListener("click", (event) => {
         keyPress(event.target.id.toLowerCase());
     })
