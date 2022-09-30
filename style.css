@@ -21,20 +21,25 @@ body {
 body.anim {
     overflow: unset;
 }
-* {
+*:not(option) {
     color: white;
+}
+* {
     font-family: 'Montserrat', sans-serif;
 }
-input[type=number] {
+input[type=number], select#wordlength {
     width: 70vw;
-    height: 10vh;
-    font-size: 30px;
+    height: 8vh;
+    font-size: 15px;
     background: #222;
     border: 2px solid #222;
-    margin-bottom: 20px;
+    margin-bottom: 5px;
     padding-left: 3vw;
     border-radius: 10px;
     -moz-appearance: textfield;
+}
+select#wordlength {
+    margin-bottom: 15px;
 }
 #main {
     text-align: center;
@@ -225,9 +230,6 @@ span.close {
 span.close:hover {
     color: #333;
 }
-select#keyloc {
-    display: none;
-}
 button {
     vertical-align: top;
     cursor: pointer;
@@ -266,6 +268,17 @@ select.setting {
     color: black;
     background: rgb(150, 150, 150);
 }
+span#warning {
+    font-size: 15px;
+    color: grey;
+    margin-top: 10px;
+    display: inline-block;
+    opacity: 0%;
+    transition: opacity 0.2s;
+}
+span#warning.display {
+    opacity: 100%;
+}
 tr.empty.c + tr.empty.c {
     display: none;
 }
@@ -277,25 +290,40 @@ tr.open.c + tr.empty.c td:last-child::after {
 table.completed tr.empty.c {
     display: none;
 }
+span#help {
+    display: inline-block;
+    background: rgb(41, 41, 72);
+    border-radius: 50%;
+    height: 20px;
+    margin: 0 10px;
+    aspect-ratio: 1/1;
+    cursor: pointer;
+}
+span#help:hover::after {
+    opacity: 100%;
+}
+span#help::after {
+    content: "In the daily game, everyone who uses the same word length and number of boards has the same answers. However, the practice game is randomised and different every time.";
+    background: rgb(40, 38, 56);
+    position: absolute;
+    left: 10%;
+    max-width: 80%;
+    font-size: 15px;
+    transition: opacity 0.2s;
+    opacity: 0%;
+    padding: 8px;
+    border-radius: 5px;
+}
 @media not screen and (max-device-width: 480px) { /* desktop view */
-    select#keyloc {
-        display: unset;
-        background: transparent;
-        position: absolute;
-        width: 1.5vw;
-        height: 1.5vw;
-        left: 0.6vw;
-    }
-    #keyloc option {
-        font-family: 'Material Symbols Outlined';
-        font-size: 20px;
-        line-height: 1;
-        color: black;
-    }
-    input[type=number] {
+    input[type=number], select#wordlength {
         width: 50vw;
         height: 8vh;
-        padding-left: 2vw;
+        font-size: 20px;
+        padding-left: 1vw;
+    }
+    span#help::after {
+        left: auto;
+        max-width: 300px;
     }
     button.play {
         width: 20vw;
@@ -326,6 +354,9 @@ table.completed tr.empty.c {
         right: 0;
         border-left: 1vh solid rgb(69, 66, 92);
         border-right: unset;
+    }
+    #keyboard.none {
+        display: none;
     }
     #keyboard.center {
         border-radius: 20px 20px 0 0;

@@ -21,10 +21,21 @@
         <span id="title">wordle<sup>&#119899;</sup></span> <br>
         <span id="subtitle"></span>
         <div id="start">
-            <p id="intro">wordle<sup>&#119899;</sup> is a game similar to Wordle, Dordle, and Quordle, but you pick exactly the number of boards you want to have. Simply type the number in, and hit Play!</p> <br>
-            <input type="number" id="boardnum" value="14" max="100"> <br>
-            <button id="daily" class="play">Play the daily Tetradecordle</button><!--
-         --><button id="practice" class="play">Play a practice Tetradecordle</button>
+            <p id="intro">wordle<sup>&#119899;</sup> is a game similar to Wordle, Dordle, and Quordle, but you can pick the number of boards, as well as the length of the words. Simply type in your numbers, and pick your gamemode!<span id="help">?</span></p><br>
+            <input type="number" id="boardnum" placeholder="Number of Boards" max="100"> <br>
+            <select id="wordlength">
+                <option value="5" disabled hidden selected>Word Length (Default 5)</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select> <br>
+            <button id="daily" class="play" disabled>Play daily</button><!--
+         --><button id="practice" class="play" disabled>Play practice</button>
+            <br><span id="warning">
+                Warning: Word lengths other than 5 do not have curated dictionaries and may have unusual solutions, or lack some valid guesses.
+            </span>
         </div>
 
         <div id="keyboard">
@@ -41,11 +52,6 @@
                 <button id="P" class="key">P</button>
             </div>
             <div class="row" id="row2">
-                <select id="keyloc">
-                    <option value="left">format_align_left</option>
-                    <option value="center">format_align_center</option>
-                    <option value="right">format_align_right</option>
-                </select>
                 <button id="A" class="key">A</button>
                 <button id="S" class="key">S</button>
                 <button id="D" class="key">D</button>
@@ -95,10 +101,11 @@
                 <br>
                 Keyboard Position:
                 <br>
-                <select class="setting" id="keyboard_pos" data-settingname="keyboard_pos" data-allowed="left center right">
+                <select class="setting" id="keyboard_pos" data-settingname="keyboard_pos" data-allowed="left center right none">
                     <option value="left">Left</option>
                     <option value="center">Center</option>
                     <option value="right">Right</option>
+                    <option value="none">None</option>
                 </select>
                 Keyboard Letter Grey Out:
                 <br>
